@@ -1,0 +1,61 @@
+{
+  "name": "idsp2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "ts-node-dev --respawn server.ts",
+    "deploy": "sh deploy.sh",
+    "deployChatApp": "sh deployChatApp.sh",
+    "testLogin": "npx jest ./testing/login.test.js",
+    "testSignup": "npx jest ./testing/signup.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kjohnathan/idsp2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kjohnathan/idsp2/issues"
+  },
+  "homepage": "https://github.com/kjohnathan/idsp2#readme",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.14.0",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/mongodb": "^3.6.12",
+    "@types/nodemailer": "^6.4.1",
+    "@types/nodemailer-sendgrid": "^1.0.0",
+    "@types/socket.io": "^2.1.13",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "firebase-admin": "^9.6.0",
+    "ioredis": "^4.27.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongodb": "^3.6.6",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.6.0",
+    "nodemailer-sendgrid": "^1.0.3",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.1.0",
+    "supertest": "^6.1.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.0",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.5",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.4"
+  }
+}
