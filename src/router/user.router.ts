@@ -132,6 +132,8 @@ class UserRouter {
     res: Response,
     next: NextFunction
   ) => {
+    console.log("updateProfile");
+
     try {
       const userId = req.user.userId;
       const updates = req.body;

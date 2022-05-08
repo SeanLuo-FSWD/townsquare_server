@@ -7,6 +7,7 @@ import FollowingModels from "../model/following.model";
 import FollowingModel from "../model/following.model";
 import NotificationModel from "../model/notification.model";
 import ConversationModel from "../model/conversation.model";
+import PhotoModel from "../model/photo.model";
 
 class UserService {
   static updateUserAvatar = async (userId, image) => {
@@ -24,10 +25,21 @@ class UserService {
   static updateUserProfile = async (userId, updates) => {
     let newAvatarLink;
     if (updates["avatar"]) {
-      newAvatarLink = await new ImageModel(
-        updates["avatar"].originalname,
+      const photoModel = new PhotoModel();
+
+      const newAvatarObj = await photoModel.uploadImage(
         updates["avatar"].buffer
-      ).upload();
+      );
+
+      // newAvatarLink = await new ImageModel(
+      //   updates["avatar"].originalname,
+      //   updates["avatar"].buffer
+      // ).upload();
+
+      console.log("aaaaaaaaaa___updateUserProfile__aaaaaaaaaaaaaa");
+      console.log(newAvatarObj);
+
+      newAvatarLink = newAvatarObj.secure_url;
 
       updates.avatar = newAvatarLink;
     }
@@ -45,6 +57,31 @@ class UserService {
 
     return result;
   };
+
+  // static updateUserProfile = async (userId, updates) => {
+  //   let newAvatarLink;
+  //   if (updates["avatar"]) {
+  //     newAvatarLink = await new ImageModel(
+  //       updates["avatar"].originalname,
+  //       updates["avatar"].buffer
+  //     ).upload();
+
+  //     updates.avatar = newAvatarLink;
+  //   }
+  //   await UserModel.updateProfile(userId, updates);
+  //   if (updates["avatar"]) {
+  //     await PostModel.updateUserPostsAvatar(userId, newAvatarLink);
+  //     await CommentModel.updateUserCommentsAvatar(userId, newAvatarLink);
+  //     await LikeModel.updateUserLikesAvatar(userId, newAvatarLink);
+  //     await ConversationModel.updateUserConversationAvatar(
+  //       userId,
+  //       newAvatarLink
+  //     );
+  //   }
+  //   const result = await UserModel.getUserById(userId);
+
+  //   return result;
+  // };
 
   static followUser = async (user, followingUserId) => {
     const result = await new FollowingModel(
