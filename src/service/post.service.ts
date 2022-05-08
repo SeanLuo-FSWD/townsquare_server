@@ -2,6 +2,7 @@ import PostModel from "../model/post.model";
 import ImageModel from "../model/image.model";
 import LikeModel from "../model/like.model";
 import NotificationModel from "../model/notification.model";
+import PhotoModel from "../model/photo.model";
 
 class PostService {
   public async getFeed(filter: any, req: any) {
@@ -14,17 +15,22 @@ class PostService {
     const postData = req.body;
 
     let imagesUploadResult = [];
+    const photoModel = new PhotoModel();
+
+    console.log("req.files.length");
+    console.log(req.files.length);
 
     if (req.files.length) {
-      const imagesUploadArr = req.files.map(
-        async (file) =>
-          await new ImageModel(file.originalname, file.buffer).upload()
-      );
+      const imagesUploadArr = req.files.map(async (file) => {
+        return photoModel.uploadImage(file.buffer);
+      });
       imagesUploadResult = await Promise.all(imagesUploadArr);
     }
 
     postData.images = imagesUploadResult.length
-      ? imagesUploadResult.map((imageUrl: string) => imageUrl)
+      ? imagesUploadResult.map((imageUrl: any) => {
+          return imageUrl.secure_url;
+        })
       : [];
 
     const post = new PostModel(user, postData);
