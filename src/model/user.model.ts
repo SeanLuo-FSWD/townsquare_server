@@ -14,6 +14,7 @@ class UserModel {
   private _age: number | undefined;
   private _gender: string | undefined;
   private _location: string | undefined;
+  // private _hasMessage: boolean;
   private saltRounds: number = 10;
 
   constructor(input) {
@@ -90,6 +91,7 @@ class UserModel {
       location: this._location,
       createdAt: this._createdAt,
       firstTime: true,
+      hasMessage: false,
     });
 
     return {
@@ -112,6 +114,7 @@ class UserModel {
         gender: user.gender,
         location: user.location,
         age: user.age,
+        hasMessage: user.hasMessage,
       };
     }
     return null;
@@ -136,6 +139,7 @@ class UserModel {
         location: user.location,
         emailVerified: user.emailVerified,
         firstTime: user.firstTime,
+        hasMessage: user.hasMessage,
       };
     }
     return null;

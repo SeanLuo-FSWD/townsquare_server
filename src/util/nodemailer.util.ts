@@ -10,7 +10,7 @@ async function sendEmail(receiverEmail: string, verificationLink) {
     );
 
     let info = await transporter.sendMail({
-      from: `"idsp.townsquare" juiyigung@hotmail.com`,
+      from: `LUOXIAO1106@gmail.com`,
       to: receiverEmail,
       subject: "TownSquare Verification",
       // html: `<p>Please click on the following link to verify your email: http://34.145.97.81/user/verify?id=${verificationLink}</p>`,
