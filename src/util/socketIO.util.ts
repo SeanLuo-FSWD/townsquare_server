@@ -6,6 +6,7 @@ import sessionMiddlware from "../middleware/session.middleware";
 import { getDB } from "./database.util";
 import { ObjectId } from "mongodb";
 import ConversationModel from "../model/conversation.model";
+import UserModel from "../model/user.model";
 
 class SocketIO {
   private _io;
@@ -111,7 +112,16 @@ class SocketIO {
       });
 
       socket.on("chat message", async (msg) => {
+        console.log("on chat message - socket.request.user");
+        console.log(socket.request.user.userId);
         const database = getDB();
+
+        const conversation = await database.collection("conversation").findOne({
+          _id: new ObjectId(msg.conversationId),
+        });
+
+        const membersInConversation = conversation.members;
+
         const newMessage = {
           ...msg,
           createdAt: Date.now(),
@@ -124,13 +134,34 @@ class SocketIO {
         });
 
         //emit to chats list
-        const conversation = await database.collection("conversation").findOne({
-          _id: new ObjectId(msg.conversationId),
-        });
 
-        const membersInConversation = conversation.members;
         for (const conversationMember of membersInConversation) {
           const matchedUser = this._users[conversationMember.userId];
+
+          // everyone in the conversation has to be notified, even if not online.
+
+          if (socket.request.user.userId != conversationMember.userId) {
+            await UserModel.updateProfile(conversationMember.userId, {
+              hasMessage: true,
+            });
+
+            // If the user is online, then additionally notify via socket.io.
+            console.log("conversationMember.userIddddd");
+            console.log(conversationMember.userId);
+
+            if (this._users[conversationMember.userId]) {
+              console.log(
+                "new______message________notification____BE conversationMember.id 1"
+              );
+              console.log(this._users[conversationMember.userId].id);
+
+              socket
+                .to(this._users[conversationMember.userId].id)
+                .emit("new_message_notification");
+            }
+          }
+
+          console.log("saving hasMessage seems successful to other user");
 
           if (matchedUser) {
             const socketId = matchedUser.id;
@@ -160,6 +191,7 @@ class SocketIO {
           id: socket.id,
         };
       } else {
+        // Caching the socketId to the connected user's id property, to save all connected users.
         this._users[socket.request.user.userId].id = socket.id;
       }
     }

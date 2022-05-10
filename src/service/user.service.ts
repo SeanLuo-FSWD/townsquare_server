@@ -36,13 +36,14 @@ class UserService {
       //   updates["avatar"].buffer
       // ).upload();
 
-      console.log("aaaaaaaaaa___updateUserProfile__aaaaaaaaaaaaaa");
-      console.log(newAvatarObj);
-
       newAvatarLink = newAvatarObj.secure_url;
 
       updates.avatar = newAvatarLink;
     }
+
+    console.log("aaaaaaaaaa___updateUserProfile__aaaaaaaaaaaaaa");
+    console.log(updates); // { age: '22' }
+
     await UserModel.updateProfile(userId, updates);
     if (updates["avatar"]) {
       await PostModel.updateUserPostsAvatar(userId, newAvatarLink);
