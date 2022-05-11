@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 import nodemailerSendgrid from "nodemailer-sendgrid";
+import dotenv from "dotenv";
+dotenv.config();
 
 async function sendEmail(receiverEmail: string, verificationLink) {
   try {
@@ -14,7 +16,7 @@ async function sendEmail(receiverEmail: string, verificationLink) {
       to: receiverEmail,
       subject: "TownSquare Verification",
       // html: `<p>Please click on the following link to verify your email: http://34.145.97.81/user/verify?id=${verificationLink}</p>`,
-      html: `<p>Please click on the following link to verify your email: http://localhost:3000/user/verify?id=${verificationLink}</p>`,
+      html: `<p>Please click on the following link to verify your email: ${process.env.CLIENT}/user/verify?id=${verificationLink}</p>`,
     });
   } catch (err) {
     console.log(err);

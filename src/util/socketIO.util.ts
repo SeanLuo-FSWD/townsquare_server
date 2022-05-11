@@ -2,7 +2,7 @@ import http from "http";
 import { Server } from "socket.io";
 import passport from "./passport.util";
 import sessionMiddlware from "../middleware/session.middleware";
-
+import dotenv from "dotenv";
 import { getDB } from "./database.util";
 import { ObjectId } from "mongodb";
 import ConversationModel from "../model/conversation.model";
@@ -13,6 +13,7 @@ class SocketIO {
   private _server;
   private _users = {};
   constructor(app) {
+    dotenv.config();
     this._server = http.createServer(app);
     this._io = new Server(this._server, {
       cors: {
@@ -29,7 +30,7 @@ class SocketIO {
     middleware(socket.request, {}, next);
 
   initServer = () => {
-    this._server.listen(8000, () => {
+    this._server.listen(process.env.PORT, () => {
       console.log("server listening");
     });
   };
