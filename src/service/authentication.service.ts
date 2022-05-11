@@ -44,6 +44,11 @@ class AuthenticationService {
 
   public async signUp(signUpInfo) {
     //signUpInfo: { email: .., password: .. }
+
+    console.log("signUpInfo__________signUpInfo");
+
+    console.log(signUpInfo);
+
     const user = new UserModel(signUpInfo);
     const isExisted = await user.isExisted();
     if (isExisted) {

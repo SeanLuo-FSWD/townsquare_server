@@ -21,9 +21,13 @@ class UserModel {
     this._email = input.email;
     this._password = input.password;
     this._username = input.username;
+    this._age = input.age;
+    this._location = input.location;
+    this._gender = input.gender;
+
     this._emailVerified = false;
     this._avatar =
-      "https://res.cloudinary.com/depk87ok3/image/upload/v1619723749/defaultProfilePhoto-min_zdwber.png";
+      "https://res.cloudinary.com/dmsrej5yr/image/upload/v1652241055/images_svupse.png";
     this._createdAt = new Date().toString();
   }
 
