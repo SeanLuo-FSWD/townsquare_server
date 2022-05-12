@@ -2,22 +2,22 @@ import http from "http";
 import { Server } from "socket.io";
 import passport from "./passport.util";
 import sessionMiddlware from "../middleware/session.middleware";
-import dotenv from "dotenv";
 import { getDB } from "./database.util";
 import { ObjectId } from "mongodb";
 import ConversationModel from "../model/conversation.model";
 import UserModel from "../model/user.model";
+import dotenv from "dotenv";
+dotenv.config();
 
 class SocketIO {
   private _io;
   private _server;
   private _users = {};
   constructor(app) {
-    dotenv.config();
     this._server = http.createServer(app);
     this._io = new Server(this._server, {
       cors: {
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT,
         methods: ["GET", "POST"],
         credentials: true,
       },
@@ -129,6 +129,8 @@ class SocketIO {
         };
         await database.collection("message").insertOne(newMessage);
         // this._io.to(msg.conversationId).emit("received", { messages });
+
+        console.log("emitting_________received_______message");
 
         this._io.to(msg.conversationId).emit("received", {
           newMsg: newMessage,

@@ -52,6 +52,13 @@ class LikeModel {
     );
     return "success";
   };
+
+  static async deleteLikes(userId) {
+    const database = getDB();
+    const result = await database.collection("like").deleteMany({ userId });
+
+    return result;
+  }
 }
 
 export default LikeModel;

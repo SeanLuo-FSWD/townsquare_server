@@ -46,6 +46,13 @@ class CommentModel {
     };
   }
 
+  static async deleteComments(userId) {
+    const database = getDB();
+    const result = await database.collection("comment").deleteMany({ userId });
+
+    return result;
+  }
+
   static async getAllCommentsByPostId(postId) {
     const database = getDB();
     const comments = await database
@@ -53,7 +60,7 @@ class CommentModel {
       .find({ postId: postId })
       .sort({ createdAt: -1 })
       .toArray();
-      
+
     return comments;
   }
 

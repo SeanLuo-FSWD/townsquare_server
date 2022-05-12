@@ -3,6 +3,8 @@ import morgan from "morgan";
 import cors from "cors";
 import passport from "passport";
 import sessionMiddlware from "./session.middleware";
+import dotenv from "dotenv";
+dotenv.config();
 
 module.exports = (app) => {
   console.log("init middlewares");
@@ -11,13 +13,11 @@ module.exports = (app) => {
   app.use(morgan("tiny"));
   //need to be cleanedup for deployment
   app.use(
-    cors(
-      {
-        origin: "http://localhost:3000",
-        methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
-        credentials: true,
-      }
-    )
+    cors({
+      origin: process.env.CLIENT,
+      methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+      credentials: true,
+    })
   );
   app.use(sessionMiddlware);
   app.use(passport.initialize());

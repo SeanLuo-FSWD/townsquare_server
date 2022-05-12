@@ -195,6 +195,15 @@ class UserModel {
     );
     return "success";
   };
+
+  static async deleteUser(userId) {
+    const database = getDB();
+    const result = await database.collection("user").deleteOne({
+      _id: new ObjectId(userId),
+    });
+
+    return result;
+  }
 }
 
 export default UserModel;

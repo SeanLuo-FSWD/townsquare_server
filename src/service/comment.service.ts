@@ -42,9 +42,13 @@ class CommentService {
 
   public async getCommentsByPostId(postId) {
     const result = await CommentModel.getAllCommentsByPostId(postId);
-
     return result;
   }
+
+  // public async deleteComments() {
+  //   const result = await CommentModel.deleteComments();
+  //   return result;
+  // }
 }
 
 export default CommentService;

@@ -41,9 +41,6 @@ class UserService {
       updates.avatar = newAvatarLink;
     }
 
-    console.log("aaaaaaaaaa___updateUserProfile__aaaaaaaaaaaaaa");
-    console.log(updates); // { age: '22' }
-
     await UserModel.updateProfile(userId, updates);
     if (updates["avatar"]) {
       await PostModel.updateUserPostsAvatar(userId, newAvatarLink);
@@ -59,30 +56,17 @@ class UserService {
     return result;
   };
 
-  // static updateUserProfile = async (userId, updates) => {
-  //   let newAvatarLink;
-  //   if (updates["avatar"]) {
-  //     newAvatarLink = await new ImageModel(
-  //       updates["avatar"].originalname,
-  //       updates["avatar"].buffer
-  //     ).upload();
+  static async deleteAccount(userId) {
+    await CommentModel.deleteComments(userId);
+    await FollowingModel.deleteFollowings(userId);
+    await LikeModel.deleteLikes(userId);
+    await NotificationModel.clearAllNotifications(userId);
+    await PostModel.deletePostsByUser(userId);
 
-  //     updates.avatar = newAvatarLink;
-  //   }
-  //   await UserModel.updateProfile(userId, updates);
-  //   if (updates["avatar"]) {
-  //     await PostModel.updateUserPostsAvatar(userId, newAvatarLink);
-  //     await CommentModel.updateUserCommentsAvatar(userId, newAvatarLink);
-  //     await LikeModel.updateUserLikesAvatar(userId, newAvatarLink);
-  //     await ConversationModel.updateUserConversationAvatar(
-  //       userId,
-  //       newAvatarLink
-  //     );
-  //   }
-  //   const result = await UserModel.getUserById(userId);
+    const result = await UserModel.deleteUser(userId);
 
-  //   return result;
-  // };
+    return result;
+  }
 
   static followUser = async (user, followingUserId) => {
     const result = await new FollowingModel(

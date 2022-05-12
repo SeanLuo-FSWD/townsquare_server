@@ -13,7 +13,23 @@ class CommentRouter {
   private initializeRoutes() {
     this.router.post(`/`, this.createComment);
     this.router.get(`/:postId`, this.getCommentByPostId);
+    // this.router.get(`/`, this.deleteComments);
   }
+
+  // private deleteComments = async (
+  //   req: Request,
+  //   res: Response,
+  //   next: NextFunction
+  // ) => {
+  //   console.log("deleteComments hit");
+
+  //   try {
+  //     const result = await this._commentService.deleteComments();
+  //     res.status(200).send(result);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // };
 
   private createComment = async (
     req: Request,

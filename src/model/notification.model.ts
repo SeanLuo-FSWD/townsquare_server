@@ -79,6 +79,15 @@ class NotificationModel {
 
     return Boolean(deleteResult.result.n);
   }
+
+  // static async deleteNotifications(userId) {
+  //   const database = getDB();
+  //   const result = await database
+  //     .collection("notification")
+  //     .deleteMany({ receiverId: userId });
+
+  //   return result;
+  // }
 }
 
 export default NotificationModel;

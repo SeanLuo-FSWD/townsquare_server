@@ -32,6 +32,7 @@ class UserRouter {
     this.router.get("/authenticate", checkAuth, this.authenticate);
     this.router.post("/followUser", this.followUser);
     this.router.get("/followingUsers", this.getFollowingUsers);
+
     this.router.post(
       "/avatar/:userId",
       multerUpload.array("filesToUpload[]"),
@@ -42,7 +43,24 @@ class UserRouter {
       [checkAuth, multerUpload.single("avatar")],
       this.updateProfile
     );
+    this.router.get("/deleteaccount", this.deleteAccount);
   }
+
+  private deleteAccount = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    console.log("hiiiiiiiiiiit_deleteAccount");
+
+    try {
+      await UserService.deleteAccount(req.user.userId);
+      req.logout();
+      res.status(200).send({ message: "success" });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   private signUp = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -55,17 +73,9 @@ class UserRouter {
 
   private login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log("1111111111111111111111");
-      console.log("user.router.ts : req.body");
-      console.log(req.body);
-
       const result = await this._authService.login(req, res, next);
 
       await UserModel.updateLastLogin(result.userId);
-
-      console.log("2222222222222222");
-      console.log("user.router.ts : result");
-      console.log(result);
 
       res.status(200).send(result);
     } catch (error) {
@@ -80,7 +90,6 @@ class UserRouter {
   };
 
   private authenticate = (req: Request, res: Response) => {
-    console.log("2222222222222222");
     res.status(200).send(req.user);
   };
 
@@ -91,18 +100,10 @@ class UserRouter {
   ) => {
     try {
       const userId = req.query.id;
-      console.log("000000000000000000000");
-      console.log("999999999999999999999");
-      console.log(req.query);
 
       await this._authService.verifyEmail(userId);
       res.status(200).send({ message: "verified" });
     } catch (error) {
-      console.log("zzzzzzzzzzzzzzzzzzzzzzz");
-      console.log("xxxxxxxxxxxxxxxxxxxxxx");
-
-      console.log(error);
-
       next(error);
     }
   };

@@ -17,9 +17,6 @@ class PostService {
     let imagesUploadResult = [];
     const photoModel = new PhotoModel();
 
-    console.log("req.files.length");
-    console.log(req.files.length);
-
     if (req.files.length) {
       const imagesUploadArr = req.files.map(async (file) => {
         return photoModel.uploadImage(file.buffer);

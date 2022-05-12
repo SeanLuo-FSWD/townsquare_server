@@ -85,6 +85,13 @@ class PostModel {
     return Boolean(deleteResult.deletedCount);
   }
 
+  static async deletePostsByUser(userId) {
+    const database = getDB();
+    const result = await database.collection("post").deleteMany({ userId });
+
+    return result;
+  }
+
   static async togglePostLike(user, postId: string) {
     const database = getDB();
     const session = client.startSession();
