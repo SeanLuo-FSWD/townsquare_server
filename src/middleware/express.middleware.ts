@@ -7,19 +7,19 @@ import dotenv from "dotenv";
 dotenv.config();
 
 module.exports = (app) => {
-  app.use(cors());
+  // app.use(cors());
   console.log("init middlewares");
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(morgan("tiny"));
   //need to be cleanedup for deployment
-  // app.use(
-  //   cors({
-  //     origin: process.env.CLIENT,
-  //     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
-  //     credentials: true,
-  //   })
-  // );
+  app.use(
+    cors({
+      origin: process.env.CLIENT,
+      methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+      credentials: true,
+    })
+  );
   app.use(sessionMiddlware);
   app.use(passport.initialize());
   app.use(passport.session());
