@@ -19,7 +19,6 @@ class App {
 
   constructor() {
     console.log("________======__________");
-    console.log(process.env.NODE_ENV);
 
     this._app = express();
     dotenv.config();
