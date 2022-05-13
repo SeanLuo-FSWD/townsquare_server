@@ -9,7 +9,8 @@
     "deploy": "sh deploy.sh",
     "deployChatApp": "sh deployChatApp.sh",
     "testLogin": "npx jest ./testing/login.test.js",
-    "testSignup": "npx jest ./testing/signup.test.ts"
+    "testSignup": "npx jest ./testing/signup.test.ts",
+    "build": "tsc -p ."
   },
   "author": "",
   "license": "ISC",
