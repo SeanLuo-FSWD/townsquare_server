@@ -3,13 +3,13 @@ import dotenv from "dotenv";
 import path from "path";
 import http from "http";
 
-import { connectDB } from "./src/util/database.util";
+import { connectDB } from "./util/database.util";
 
-import APIRouter from "./src/router/api.router";
+import APIRouter from "./router/api.router";
 
-import errorHandlingMiddleware from "./src/middleware/errorHandling.middleware";
+import errorHandlingMiddleware from "./middleware/errorHandling.middleware";
 
-import SocketIO from "./src/util/socketIO.util";
+import SocketIO from "./util/socketIO.util";
 
 class App {
   private _app: express.Application;
@@ -37,7 +37,7 @@ class App {
   }
 
   public initializeMiddleWares() {
-    require("./src/middleware/express.middleware")(this._app);
+    require("./middleware/express.middleware")(this._app);
   }
 
   public initAPIRouter() {
