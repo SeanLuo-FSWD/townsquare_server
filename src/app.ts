@@ -3,13 +3,13 @@ import dotenv from "dotenv";
 import path from "path";
 import http from "http";
 
-import { connectDB } from "./util/database.util.js";
+import { connectDB } from "./util/database.util";
 
-import APIRouter from "./router/api.router.js";
+import APIRouter from "./router/api.router";
 
-import errorHandlingMiddleware from "./middleware/errorHandling.middleware.js";
+import errorHandlingMiddleware from "./middleware/errorHandling.middleware";
 
-import SocketIO from "./util/socketIO.util.js";
+import SocketIO from "./util/socketIO.util";
 
 class App {
   private _app: express.Application;
