@@ -15,11 +15,12 @@ module.exports = (app) => {
   //need to be cleanedup for deployment
   app.use(
     cors({
+      credentials: true,
       origin: process.env.CLIENT,
       methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
-      credentials: true,
     })
   );
+  app.set("trust proxy", 1);
   app.use(sessionMiddlware);
   app.use(passport.initialize());
   app.use(passport.session());
