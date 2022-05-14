@@ -1,1 +1,1 @@
-web: node ./dist/src/server.js
+web: node --experimental-specifier-resolution=node ./dist/src/server.js
