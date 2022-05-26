@@ -26,13 +26,20 @@ class ConversationService {
       "ConversationService____getAllConversationsByUserId____userId: " + userId
     );
 
-    await UserModel.updateProfile(userId, { hasMessage: false });
+    // await UserModel.updateProfile(userId, { hasMessage: false });
+    this.removeHasMessage(userId);
 
     const conversations = await ConversationModel.getAllConversationsByUserId(
       userId
     );
     return conversations;
   };
+
+
+  public removeHasMessage = async(userId) => {
+    await UserModel.updateProfile(userId, { hasMessage: false });
+    return true;
+  }
 }
 
 export default ConversationService;

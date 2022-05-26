@@ -17,6 +17,21 @@ class ConversationRouter {
     this.router.post("/", this.getConversationByMembers);
     this.router.get("/:conversationId/message", this.getMessagesInConversation);
     this.router.get("/", this.getAllConversationsByUserId);
+    this.router.get("/removeHasMessage", this.removeHasMessage);
+  }
+
+  private removeHasMessage = async (    
+    req: Request,
+    res: Response,
+    next: NextFunction) => {
+      console.log("removeHasMessage_removeHasMessage_removeHasMessage");
+      
+      try {
+        await this._service.removeHasMessage(req.user.userId);
+        res.status(200).send({message: "success"});
+      } catch (error) {
+        next(error);
+      }
   }
 
   // renamed from "getConversationIdByMembers" to  "getConversationByConversationId", to match what code actually do.

@@ -13,6 +13,8 @@ class SocketIO {
   private _io;
   private _server;
   private _users = {};
+  private _chatList = [];
+
   constructor(app) {
     this._server = http.createServer(app);
     this._io = new Server(this._server, {
@@ -80,17 +82,37 @@ class SocketIO {
       socket.on("enter chatroom", (data) => {
         // const room_status = socket.rooms.indexOf(data.conversationId) >= 0;
 
+        console.log('socket.roomssocket.roomssocket.roomssocket.rooms__data');
+        
+        console.log(data);
+        console.log(Object.keys(socket.rooms));
+        
         const room_status = Object.keys(socket.rooms).includes(
           data.conversationId
         );
 
         if (!room_status) {
+          console.log('joineeeed room as no status');
+
+          // if(!this._chatList[data.conversationId])
+
+          this._chatList.push({
+            conversationId: data.conversationId,
+            userId: data.currentUserId
+          })
+
+          console.log(this._chatList);
+          
+
           socket.join(data.conversationId);
         }
       });
 
       socket.on("leaveChatroom", (data) => {
         socket.leave(data.conversationId);
+        this._chatList = this._chatList.filter((cl) => {
+          return cl.userId != socket.request.user.userId;
+        });
       });
 
       socket.on("activeUsers", () => {
@@ -114,7 +136,7 @@ class SocketIO {
 
       socket.on("chat message", async (msg) => {
         console.log("on chat message - socket.request.user");
-        console.log(socket.request.user.userId);
+        console.log(socket.request.user);
         const database = getDB();
 
         const conversation = await database.collection("conversation").findOne({
@@ -136,33 +158,24 @@ class SocketIO {
           newMsg: newMessage,
         });
 
+
         //emit to chats list
 
         for (const conversationMember of membersInConversation) {
           const matchedUser = this._users[conversationMember.userId];
 
           // everyone in the conversation has to be notified, even if not online.
+            // if (socket.request.user.userId != conversationMember.userId) {
+            //   await UserModel.updateProfile(conversationMember.userId, {
+            //     hasMessage: true,
+            //   });
 
-          if (socket.request.user.userId != conversationMember.userId) {
-            await UserModel.updateProfile(conversationMember.userId, {
-              hasMessage: true,
-            });
-
-            // If the user is online, then additionally notify via socket.io.
-            console.log("conversationMember.userIddddd");
-            console.log(conversationMember.userId);
-
-            if (this._users[conversationMember.userId]) {
-              console.log(
-                "new______message________notification____BE conversationMember.id 1"
-              );
-              console.log(this._users[conversationMember.userId].id);
-
-              socket
-                .to(this._users[conversationMember.userId].id)
-                .emit("new_message_notification");
-            }
-          }
+            //   if (this._users[conversationMember.userId]) {
+            //     socket
+            //       .to(this._users[conversationMember.userId].id)
+            //       .emit("new_message_notification");
+            //   }
+            // }
 
           console.log("saving hasMessage seems successful to other user");
 
@@ -177,6 +190,32 @@ class SocketIO {
             socket.to(socketId).emit("updateChats", latestConversations);
           }
         }
+
+        // Emit notification
+        let receivers = this._chatList.filter(cl => {
+          // Cannot be sender
+          // Must share same chat_id 
+          return cl.conversationId === msg.conversationId
+        }).map(r => {
+          return r.userId;
+        })
+
+        let non_connected_users = []
+        conversation.members.forEach(mb => {
+          if(!receivers.includes(mb.userId)) {
+            non_connected_users.push(mb.userId);
+          }
+        });
+        
+        console.log("non_connected_users_non_connected_users_non_connected_users");
+        console.log(non_connected_users);
+        non_connected_users.forEach(async (r) => {
+          await UserModel.updateProfile(r, {
+            hasMessage: true,
+          });
+          socket.to(this._users[r].id).emit("new_message_notification");
+        });
+
       });
 
       socket.on("disconnect", (socket) => {

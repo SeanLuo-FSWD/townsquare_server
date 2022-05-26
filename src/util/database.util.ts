@@ -2,8 +2,8 @@ import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 dotenv.config();
 
-// const uri = process.env.MONGODB;
-const uri = process.env.MONGOATLAS;
+const uri = process.env.MONGODB;
+// const uri = process.env.MONGOATLAS;
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
